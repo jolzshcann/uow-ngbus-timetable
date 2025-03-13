@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bus Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        .current-time {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            background-color: #e8f4f8;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .no-buses {
+            color: #e74c3c;
+            font-style: italic;
+        }
+        .stops-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .stops-list li {
+            margin-bottom: 3px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>University Bus Schedule</h1>
+        
+        <div class="current-time">
+            Current Time: {{ current_time }}
+        </div>
+        
+        <h2>Next Buses Leaving Northfields Ave to North Wollongong Station</h2>
+        {% if next_from_northfields %}
+        <table>
+            <tr>
+                <th>Departure</th>
+                <th>Arrival</th>
+            </tr>
+            {% for bus in next_from_northfields %}
+            <tr>
+                <td>{{ bus.depart }}</td>
+                <td>{{ bus.arrive }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p class="no-buses">No more buses today from Northfields Ave to Station.</p>
+        {% endif %}
+        
+        <h2>Next Buses leaving North Wollongong Station to Northfields Ave</h2>
+        {% if next_from_station %}
+        <table>
+            <tr>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Intermediate Stops</th>
+            </tr>
+            {% for bus in next_from_station %}
+            <tr>
+                <td>{{ bus.depart }}</td>
+                <td>{{ bus.arrive }}</td>
+                <td>
+                    {% if bus.stops %}
+                    <ul class="stops-list">
+                        {% for stop in bus.stops %}
+                        <li>{{ stop.name }} ({{ stop.time }})</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    Direct
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p class="no-buses">No more buses today from Station to Northfields Ave.</p>
+        {% endif %}
+    </div>
+
+</body>
+<footer>
+    <p>Developed by <a href="https://github.com/jolzshcann" target="_blank">Josh</a> and (mostly) claude</p>
+    </footer>
+</html>
